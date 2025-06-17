@@ -1,3 +1,4 @@
+require("dotenv").config();
 const router = require("express").Router();
 const { User, validate } = require("../models/user");
 const bcrypt = require("bcrypt");
@@ -10,7 +11,7 @@ router.post("/", async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) return res.status(403).send({ message: "User already exists!!" });
 
-  const salt = await bcrypt.genSalt(process.env.SALT);
+  const salt = await bcrypt.genSalt(parseInt(process.env.SALT));
   const hashPass = await bcrypt.hash(req.body.password, salt);
 
   let newUser = await new User({
